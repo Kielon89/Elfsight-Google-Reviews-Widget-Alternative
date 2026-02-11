@@ -212,22 +212,22 @@ export class GoogleReviewsWidget extends HTMLElement {
       const truncatedText = textExceedsLimit ? review.text.substring(0, 120) + '...' : review.text;
 
       return `
-      <div class="review-card" style="animation-delay: ${index * 100}ms">
+      <div class="review-card" style="animation-delay: ${index * 100}ms" role="article" aria-label="${t.rating_label}: ${review.rating} stars by ${review.author_name}">
         <div class="review-header">
           <img src="${review.profile_photo_url}" alt="${review.author_name}" loading="lazy">
           <div class="review-meta">
             <span class="author-name">${review.author_name}</span>
             <span class="review-time">${review.relative_time_description}</span>
           </div>
-          <a href="${review.author_url}" target="_blank" class="google-icon-link">${googleLogo}</a>
+          <a href="${review.author_url}" target="_blank" class="google-icon-link" aria-label="View on Google Maps">${googleLogo}</a>
         </div>
-        <div class="review-stars">
+        <div class="review-stars" aria-label="${review.rating} stars">
           ${Array(5).fill(0).map((_, i) => starIcon(i < review.rating)).join('')}
         </div>
         <div class="review-text-container">
             <div class="review-text short">${truncatedText}</div>
             ${textExceedsLimit ? `<div class="review-text full" style="display:none">${review.text}</div>` : ''}
-            ${textExceedsLimit ? `<button class="read-more-btn">${t.read_more}</button>` : ''}
+            ${textExceedsLimit ? `<button class="read-more-btn" aria-label="${t.read_more}">${t.read_more}</button>` : ''}
         </div>
       </div>
     `}).join('');
@@ -237,7 +237,7 @@ export class GoogleReviewsWidget extends HTMLElement {
       <div class="widget-container ${theme} ${layout}" style="${styleString}">
         ${layout === 'badge' ? this.renderBadge() : `
           ${headerHtml}
-          <div class="reviews-container ${layout === 'list' ? 'list-view' : ''}">
+          <div class="reviews-container ${layout === 'list' ? 'list-view' : ''}" role="list">
             ${reviewsHtml}
           </div>
         `}
@@ -282,23 +282,54 @@ export class GoogleReviewsWidget extends HTMLElement {
     `;
 
     return `
-      <div class="badge-content">
+      <div class="badge-content" role="status" aria-label="${t.rating_label}: ${this._data?.rating} stars from ${this._data?.user_ratings_total} reviews">
         <div class="badge-left">
           ${googleLogo}
           <div class="badge-text">
             <div class="badge-rating">
               <strong>${this._data?.rating}</strong>
-              <div class="stars">
+              <div class="stars" aria-hidden="true">
                 ${Array(5).fill(0).map((_, i) => starIcon(i < Math.round(this._data?.rating || 0))).join('')}
               </div>
             </div>
             <span class="badge-count">${this._data?.user_ratings_total} ${t.reviews}</span>
           </div>
         </div>
-        <a href="${this._data?.url}" target="_blank" class="badge-btn">${t.write_review}</a>
+        <a href="${this._data?.url}" target="_blank" class="badge-btn" aria-label="${t.write_review}">${t.write_review}</a>
       </div>
     `;
   }
 }
+
+// Global Init Helper
+declare global {
+  interface Window {
+    initGoogleReviewsWidget: (config: {
+      src?: string;
+      theme?: string;
+      layout?: string;
+      lang?: string;
+      target?: string | HTMLElement;
+    }) => void;
+  }
+}
+
+window.initGoogleReviewsWidget = (config) => {
+  const widget = document.createElement('google-reviews-widget') as GoogleReviewsWidget;
+  if (config.src) widget.setAttribute('src', config.src);
+  if (config.theme) widget.setAttribute('theme', config.theme);
+  if (config.layout) widget.setAttribute('layout', config.layout);
+  if (config.lang) widget.setAttribute('lang', config.lang);
+
+  const target = typeof config.target === 'string'
+    ? document.querySelector(config.target)
+    : config.target;
+
+  if (target) {
+    target.appendChild(widget);
+  } else {
+    document.body.appendChild(widget);
+  }
+};
 
 customElements.define('google-reviews-widget', GoogleReviewsWidget);
