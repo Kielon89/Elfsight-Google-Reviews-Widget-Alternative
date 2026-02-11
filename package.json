@@ -1,8 +1,20 @@
 {
-    "name": "google-reviews-widget",
-    "private": true,
-    "version": "0.0.0",
+    "name": "@anouar258/google-reviews-widget",
+    "version": "1.0.0",
+    "description": "A free, open-source Google Reviews widget. Zero monthly fees, SEO-friendly, and supports Grid/Carousel layouts + Multi-language.",
     "type": "module",
+    "author": {
+        "name": "AnouarLab",
+        "url": "https://anouarlab.fr"
+    },
+    "license": "MIT",
+    "keywords": [
+        "google-reviews",
+        "web-component",
+        "widget",
+        "seo",
+        "reviews"
+    ],
     "main": "./dist/widget.es.js",
     "types": "./dist/widget.d.ts",
     "files": [

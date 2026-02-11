@@ -24,7 +24,7 @@ export class GoogleReviewsWidget extends HTMLElement {
   private _data: ReviewsData | null = null;
 
   static get observedAttributes() {
-    return ['src', 'theme', 'layout', 'lang'];
+    return ['src', 'theme', 'layout', 'lang', 'min-rating', 'sort'];
   }
 
   private _translations: Record<string, any> = {
@@ -62,7 +62,24 @@ export class GoogleReviewsWidget extends HTMLElement {
     if (this.hasAttribute('src')) {
       this._src = this.getAttribute('src')!;
     }
-    this.fetchReviews();
+    this.initObserver();
+  }
+
+  initObserver() {
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.fetchReviews();
+            observer.disconnect();
+          }
+        });
+      }, { rootMargin: '200px' }); // Load when within 200px of viewport
+      observer.observe(this);
+    } else {
+      // Fallback for older browsers
+      this.fetchReviews();
+    }
   }
 
   async fetchReviews() {
@@ -156,8 +173,22 @@ export class GoogleReviewsWidget extends HTMLElement {
       </div>
     `;
 
+    // Filter & Sort Reviews
+    const minRating = parseFloat(this.getAttribute('min-rating') || '0');
+    const sort = this.getAttribute('sort') || 'newest';
+
+    const filteredReviews = this._data.reviews
+      .filter(review => review.rating >= minRating)
+      .sort((a, b) => {
+        if (sort === 'oldest') return a.time - b.time;
+        if (sort === 'highest') return b.rating - a.rating;
+        if (sort === 'lowest') return a.rating - b.rating;
+        if (sort === 'random') return 0.5 - Math.random();
+        return b.time - a.time; // Default: newest
+      });
+
     // Reviews HTML
-    const reviewsHtml = this._data.reviews.map((review, index) => {
+    const reviewsHtml = filteredReviews.map((review, index) => {
       const textExceedsLimit = review.text.length > 120;
       const truncatedText = textExceedsLimit ? review.text.substring(0, 120) + '...' : review.text;
 
@@ -185,10 +216,12 @@ export class GoogleReviewsWidget extends HTMLElement {
     this.shadowRoot.innerHTML = `
       <style>${styles}</style>
       <div class="widget-container ${theme} ${layout}">
-        ${headerHtml}
-        <div class="reviews-container">
-          ${reviewsHtml}
-        </div>
+        ${layout === 'badge' ? this.renderBadge() : `
+          ${headerHtml}
+          <div class="reviews-container">
+            ${reviewsHtml}
+          </div>
+        `}
       </div>
     `;
 
@@ -209,6 +242,43 @@ export class GoogleReviewsWidget extends HTMLElement {
         }
       });
     });
+  }
+
+  renderBadge() {
+    const t = this._translations[this.getAttribute('lang') || 'en'] || this._translations['en'];
+
+    const starIcon = (filled: boolean) => `
+      <svg class="star-icon ${filled ? 'filled' : ''}" viewBox="0 0 24 24" width="14" height="14">
+        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+      </svg>
+    `;
+
+    const googleLogo = `
+      <svg viewBox="0 0 24 24" width="20" height="20" class="google-logo">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#EA4335" d="M12 4.6c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 1.09 14.97 0 12 0 7.7 0 3.99 2.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+    `;
+
+    return `
+      <div class="badge-content">
+        <div class="badge-left">
+          ${googleLogo}
+          <div class="badge-text">
+            <div class="badge-rating">
+              <strong>${this._data?.rating}</strong>
+              <div class="stars">
+                ${Array(5).fill(0).map((_, i) => starIcon(i < Math.round(this._data?.rating || 0))).join('')}
+              </div>
+            </div>
+            <span class="badge-count">${this._data?.user_ratings_total} ${t.reviews}</span>
+          </div>
+        </div>
+        <a href="${this._data?.url}" target="_blank" class="badge-btn">${t.write_review}</a>
+      </div>
+    `;
   }
 }
 

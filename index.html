@@ -139,6 +139,41 @@
             <select id="layout">
                 <option value="grid">Grid</option>
                 <option value="carousel">Carousel</option>
+                <option value="badge">Badge (New!)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="lang">Language</label>
+            <select id="lang">
+                <option value="en">English (en)</option>
+                <option value="fr">French (fr)</option>
+                <option value="es">Spanish (es)</option>
+                <option value="de">German (de)</option>
+                <option value="it">Italian (it)</option>
+                <option value="pt">Portuguese (pt)</option>
+                <option value="nl">Dutch (nl)</option>
+                <option value="pl">Polish (pl)</option>
+                <option value="ru">Russian (ru)</option>
+                <option value="ja">Japanese (ja)</option>
+                <option value="ko">Korean (ko)</option>
+                <option value="zh">Chinese (zh)</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label for="min-rating">Min Rating: <span id="min-rating-val">0</span></label>
+            <input type="range" id="min-rating" min="0" max="5" step="0.5" value="0">
+        </div>
+
+        <div class="control-group">
+            <label for="sort">Sort By</label>
+            <select id="sort">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+                <option value="highest">Highest Rating</option>
+                <option value="lowest">Lowest Rating</option>
+                <option value="random">Random</option>
             </select>
         </div>
 
@@ -173,6 +208,10 @@
         const widget = document.querySelector('.preview-area google-reviews-widget');
         const themeSelect = document.getElementById('theme');
         const layoutSelect = document.getElementById('layout');
+        const langSelect = document.getElementById('lang');
+        const minRatingInput = document.getElementById('min-rating');
+        const minRatingVal = document.getElementById('min-rating-val');
+        const sortSelect = document.getElementById('sort');
         const canvasToggle = document.getElementById('canvas-dark');
         const embedCode = document.getElementById('embed-code');
         const copyBtn = document.getElementById('copy-btn');
@@ -180,25 +219,37 @@
         function updateWidget() {
             const theme = themeSelect.value;
             const layout = layoutSelect.value;
+            const lang = langSelect.value;
+            const minRating = minRatingInput.value;
+            const sort = sortSelect.value;
+
+            minRatingVal.textContent = minRating;
 
             widget.setAttribute('theme', theme);
             widget.setAttribute('layout', layout);
+            widget.setAttribute('lang', lang);
+            widget.setAttribute('min-rating', minRating);
+            widget.setAttribute('sort', sort);
 
-            const code = `<!-- Widget Script -->
-<script type="module" src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js"><\/script>
+            updateEmbedCode(theme, layout, lang, minRating, sort);
+        }
 
-<!-- Widget Element -->
-<google-reviews-widget 
-  src="reviews.json" 
-  theme="${theme}" 
-  layout="${layout}">
-<\/google-reviews-widget>`;
+        function updateEmbedCode(theme, layout, lang, minRating, sort) {
+            let code = `<!-- Widget Script -->\n<script type="module" src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js"><\/script>\n\n<!-- Widget Element -->\n<google-reviews-widget \n  src="reviews.json" \n  theme="${theme}" \n  layout="${layout}"`;
 
+            if (lang !== 'en') code += ` \n  lang="${lang}"`;
+            if (minRating !== '0') code += ` \n  min-rating="${minRating}"`;
+            if (sort !== 'newest') code += ` \n  sort="${sort}"`;
+
+            code += `>\n</google-reviews-widget>`;
             embedCode.textContent = code;
         }
 
         themeSelect.addEventListener('change', updateWidget);
         layoutSelect.addEventListener('change', updateWidget);
+        langSelect.addEventListener('change', updateWidget);
+        minRatingInput.addEventListener('input', updateWidget);
+        sortSelect.addEventListener('change', updateWidget);
 
         canvasToggle.addEventListener('change', (e) => {
             document.body.classList.toggle('dark-canvas', e.target.checked);
