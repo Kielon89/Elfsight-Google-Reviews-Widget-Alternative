@@ -1,0 +1,22 @@
+{
+    "name": "google-reviews-widget",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "main": "./dist/widget.es.js",
+    "types": "./dist/widget.d.ts",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "dev": "vite",
+        "build": "tsc && vite build",
+        "preview": "vite preview",
+        "fetch-reviews": "node scripts/fetch-reviews.js"
+    },
+    "devDependencies": {
+        "@types/node": "^22.13.1",
+        "typescript": "^5.9.3",
+        "vite": "^5.4.21"
+    }
+}

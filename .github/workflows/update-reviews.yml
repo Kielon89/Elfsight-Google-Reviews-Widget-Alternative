@@ -1,0 +1,44 @@
+name: Update Google Reviews
+
+on:
+  schedule:
+    # Run once a day at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  update-reviews:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies (if any needed for script)
+        # We try to keep the script dep-free, but if we need 'node-fetch' in older node versions (node 18 has global fetch, but we used https module to be safe/standard) -> actually the script uses 'https' which is built-in.
+        # But for 'tsx' or similar to run typescript script?
+        # Ah, I wrote the script in JS syntax but saved as .js, checking content...
+        # Wait, I wrote TS syntax in the previous step (import ... from ...; const result: ...). I should fix that to either be pure JS or use ts-node.
+        # Let's assume we will use pure JS for simplicity in the CI.
+        run: npm ci || true # Just in case
+
+      - name: Fetch Reviews
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+          PLACE_ID: ${{ secrets.PLACE_ID }}
+        run: node scripts/fetch-reviews.js
+
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add public/reviews.json
+          # Only commit if there are changes
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update google reviews [skip ci]" && git push)

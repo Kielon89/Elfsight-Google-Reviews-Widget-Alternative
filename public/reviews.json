@@ -1,0 +1,55 @@
+{
+    "name": "Acme Corp",
+    "rating": 4.8,
+    "user_ratings_total": 124,
+    "url": "https://maps.google.com/?cid=123456789",
+    "address": "123 Web Component St, Internet City",
+    "last_updated": "2023-10-27T10:00:00.000Z",
+    "reviews": [
+        {
+            "author_name": "John Doe",
+            "author_url": "#",
+            "profile_photo_url": "https://ui-avatars.com/api/?name=John+Doe&background=random",
+            "rating": 5,
+            "relative_time_description": "a week ago",
+            "text": "Amazing service! The widget works perfectly on all devices. Highly recommended for anyone looking for a free alternative.",
+            "time": 1698000000
+        },
+        {
+            "author_name": "Jane Smith",
+            "author_url": "#",
+            "profile_photo_url": "https://ui-avatars.com/api/?name=Jane+Smith&background=random",
+            "rating": 4,
+            "relative_time_description": "2 weeks ago",
+            "text": "Great tool, but I wish it had more themes. Still, for a free open-source project, it's incredible.",
+            "time": 1697000000
+        },
+        {
+            "author_name": "Bob Johnson",
+            "author_url": "#",
+            "profile_photo_url": "https://ui-avatars.com/api/?name=Bob+Johnson&background=random",
+            "rating": 5,
+            "relative_time_description": "a month ago",
+            "text": "Simply the best. Easy to setup and looks professional.",
+            "time": 1695000000
+        },
+        {
+            "author_name": "Alice Williams",
+            "author_url": "#",
+            "profile_photo_url": "https://ui-avatars.com/api/?name=Alice+Williams&background=random",
+            "rating": 5,
+            "relative_time_description": "2 months ago",
+            "text": "I was paying $20/month for this functionality. Now I get it for free with better performance!",
+            "time": 1692000000
+        },
+        {
+            "author_name": "Charlie Brown",
+            "author_url": "#",
+            "profile_photo_url": "https://ui-avatars.com/api/?name=Charlie+Brown&background=random",
+            "rating": 4,
+            "relative_time_description": "3 months ago",
+            "text": "Good updates, keep it coming.",
+            "time": 1690000000
+        }
+    ]
+}
