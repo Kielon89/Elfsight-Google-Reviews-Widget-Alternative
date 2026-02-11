@@ -49,10 +49,29 @@ The `lang` attribute accepts the following 2-letter codes:
 ```
 
 ### Light Mode Grid
+![Grid Layout](screenshots/grid-layout.png)
 ```html
 <google-reviews-widget 
   src="path/to/reviews.json" 
   theme="light" 
   layout="grid">
+</google-reviews-widget>
+```
+
+### List Layout
+![List Layout](screenshots/list-layout.png)
+```html
+<google-reviews-widget 
+  src="path/to/reviews.json" 
+  layout="list">
+</google-reviews-widget>
+```
+
+### Badge Layout
+![Badge Layout](screenshots/badge-layout.png)
+```html
+<google-reviews-widget 
+  src="path/to/reviews.json" 
+  layout="badge">
 </google-reviews-widget>
 ```
