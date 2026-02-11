@@ -178,6 +178,12 @@
         </div>
 
         <div class="control-group">
+            <label style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="hide-empty"> Hide Empty Reviews
+            </label>
+        </div>
+
+        <div class="control-group">
             <label>Embed Code</label>
             <div class="code-snippet" id="embed-code">
                 <!-- Widget Script -->
@@ -212,6 +218,7 @@
         const minRatingInput = document.getElementById('min-rating');
         const minRatingVal = document.getElementById('min-rating-val');
         const sortSelect = document.getElementById('sort');
+        const hideEmptyCheckbox = document.getElementById('hide-empty');
         const canvasToggle = document.getElementById('canvas-dark');
         const embedCode = document.getElementById('embed-code');
         const copyBtn = document.getElementById('copy-btn');
@@ -222,6 +229,7 @@
             const lang = langSelect.value;
             const minRating = minRatingInput.value;
             const sort = sortSelect.value;
+            const hideEmpty = hideEmptyCheckbox.checked;
 
             minRatingVal.textContent = minRating;
 
@@ -231,15 +239,22 @@
             widget.setAttribute('min-rating', minRating);
             widget.setAttribute('sort', sort);
 
-            updateEmbedCode(theme, layout, lang, minRating, sort);
+            if (hideEmpty) {
+                widget.setAttribute('hide-empty', '');
+            } else {
+                widget.removeAttribute('hide-empty');
+            }
+
+            updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty);
         }
 
-        function updateEmbedCode(theme, layout, lang, minRating, sort) {
+        function updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty) {
             let code = `<!-- Widget Script -->\n<script type="module" src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js"><\/script>\n\n<!-- Widget Element -->\n<google-reviews-widget \n  src="reviews.json" \n  theme="${theme}" \n  layout="${layout}"`;
 
             if (lang !== 'en') code += ` \n  lang="${lang}"`;
             if (minRating !== '0') code += ` \n  min-rating="${minRating}"`;
             if (sort !== 'newest') code += ` \n  sort="${sort}"`;
+            if (hideEmpty) code += ` \n  hide-empty`;
 
             code += `>\n</google-reviews-widget>`;
             embedCode.textContent = code;
@@ -250,6 +265,7 @@
         langSelect.addEventListener('change', updateWidget);
         minRatingInput.addEventListener('input', updateWidget);
         sortSelect.addEventListener('change', updateWidget);
+        hideEmptyCheckbox.addEventListener('change', updateWidget);
 
         canvasToggle.addEventListener('change', (e) => {
             document.body.classList.toggle('dark-canvas', e.target.checked);

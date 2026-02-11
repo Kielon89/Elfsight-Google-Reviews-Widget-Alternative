@@ -24,7 +24,7 @@ export class GoogleReviewsWidget extends HTMLElement {
   private _data: ReviewsData | null = null;
 
   static get observedAttributes() {
-    return ['src', 'theme', 'layout', 'lang', 'min-rating', 'sort'];
+    return ['src', 'theme', 'layout', 'lang', 'min-rating', 'sort', 'hide-empty'];
   }
 
   private _translations: Record<string, any> = {
@@ -176,9 +176,14 @@ export class GoogleReviewsWidget extends HTMLElement {
     // Filter & Sort Reviews
     const minRating = parseFloat(this.getAttribute('min-rating') || '0');
     const sort = this.getAttribute('sort') || 'newest';
+    const hideEmpty = this.hasAttribute('hide-empty');
 
     const filteredReviews = this._data.reviews
-      .filter(review => review.rating >= minRating)
+      .filter(review => {
+        if (review.rating < minRating) return false;
+        if (hideEmpty && !review.text?.trim()) return false;
+        return true;
+      })
       .sort((a, b) => {
         if (sort === 'oldest') return a.time - b.time;
         if (sort === 'highest') return b.rating - a.rating;
