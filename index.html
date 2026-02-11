@@ -214,21 +214,7 @@
                 value="#ffffff"><label for="text-color">Text Color</label><input type="color" id="text-color"
                 value="#333333">
         </div>
-        <div class="control-group"><label>Embed Code</label>
-            <div class="code-snippet" id="embed-code">&lt;
-                !-- Widget Script --&gt;
-                &lt;
-                script type="module"
-                src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js" &gt;
-                &lt;/script&gt;
 
-                &lt;
-                !-- Widget Element --&gt;
-                &lt;
-                google-reviews-widget src="reviews.json" theme="light" layout="grid" &gt;
-                &lt;/google-reviews-widget&gt;
-            </div><button class="copy-btn" id="copy-btn">Copy</button>
-        </div>
         <div class="control-group" style="margin-top: auto;"><label
                 style="display:flex; align-items:center; gap:8px;"><input type="checkbox" id="canvas-dark">Dark
                 Background </label></div>
@@ -268,6 +254,9 @@
         const starColorInput = document.getElementById('star-color');
         const bgColorInput = document.getElementById('bg-color');
         const textColorInput = document.getElementById('text-color');
+        const embedCode = document.getElementById('embed-code');
+        const canvasToggle = document.getElementById('canvas-dark');
+        const copyBtn = document.getElementById('copy-btn');
 
         function updateWidget() {
             const theme = themeSelect.value;
@@ -276,6 +265,8 @@
             const minRating = minRatingInput.value;
             const sort = sortSelect.value;
             const hideEmpty = hideEmptyCheckbox.checked;
+
+
 
             const accentColor = accentColorInput.value;
             const starColor = starColorInput.value;
@@ -310,6 +301,7 @@
         }
 
         function updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty, colors) {
+            console.log('updateEmbedCode called');
             let code = `< !-- Widget Script -->\n<script type="module" src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js"><\/script>\n\n< !-- Widget Element -->\n<google-reviews-widget \n src="reviews.json" \n theme="${theme}" \n layout="${layout}" `;
 
             if (lang !== 'en') code += ` \n lang="${lang}" `;
@@ -323,7 +315,16 @@
             if (colors.textColor !== '#333333') code += ` \n text-color="${colors.textColor}" `;
 
             code += `>\n</google-reviews-widget>`;
-            embedCode.textContent = code;
+
+            console.log('Generated code:', code);
+            console.log('Target element:', embedCode);
+
+            if (embedCode) {
+                embedCode.textContent = code;
+                console.log('Updated textContent');
+            } else {
+                console.error('embedCode element not found!');
+            }
         }
 
         themeSelect.addEventListener('change', updateWidget);
