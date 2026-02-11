@@ -53,6 +53,18 @@ If you prefer not to use GitHub Actions, you can generate the `reviews.json` fil
     <google-reviews-widget src="https://myserver.com/reviews.json"></google-reviews-widget>
     ```
 
+## 🛠️ Developer Playground
+
+The project includes a built-in interactive playground at `index.html` (accessible via `npm run dev`).
+
+Use it to:
+1.  **Visually configure** your widget (Theme, Layout, Language).
+2.  **Test specific scenarios** (e.g., "What does it look like with only 5-star reviews?").
+3.  **Generate production-ready HTML** code snippets.
+4.  **Reset** to defaults instantly to start over.
+
+![Playground UI](screenshots/minimalist-ui.png)
+
 ## Browser Support
 
 The widget is built as a standard Web Component (Custom Element). It works in all modern browsers:

@@ -14,11 +14,13 @@ Built for developers who want full control, **no monthly fees**, and zero impact
 
 -   **💸 100% Free**: Uses your own Google API Key (within the free tier) + GitHub Actions for caching.
 -   **⚡ Universal**: Works with React, Vue, Astro, WordPress, Shopify, or plain HTML.
--   **🎨 Customizable**: Native "Grid" and "Carousel" layouts. Supports Dark Mode.
+-   **🎨 Customizable**: Native "Grid", "List", and "Carousel" layouts. Supports Dark Mode.
+-   **🌈 Theming API**: Full control over colors via CSS variables and attributes.
 -   **🔍 S.E.O. Ready**: Automatically injects `LocalBusiness` Schema.org JSON-LD for rich snippets.
 -   **📱 Responsive**: Mobile-first design with masonry grid layout.
 -   **🌍 Multi-Language**: Built-in support for 12+ languages (EN, FR, ES, DE, IT, JP, etc.).
 -   **✨ Premium Feel**: Staggered fade-in animations and "Read More" truncation for long reviews.
+-   **🛠️ Interactive Playground**: Built-in `index.html` to configure, test, and generate embed codes.
 
 ## 📚 Documentation
 

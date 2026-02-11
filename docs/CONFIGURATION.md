@@ -10,6 +10,13 @@ The `<google-reviews-widget>` custom element accepts several attributes to contr
 | `theme` | `string` | `light` | Sets the color scheme. Options: `light`, `dark`. |
 | `layout` | `string` | `grid` | Sets the display layout. Options: `grid` (masonry), `carousel` (horizontal slider). |
 | `lang` | `string` | `en` | Sets the language. See [Supported Languages](#supported-languages) below. |
+| `sort` | `string` | `newest` | Sort order: `newest`, `oldest`, `highest`, `lowest`, `random`. |
+| `min-rating` | `number` | `0` | Filter reviews below this rating (e.g., `4`). |
+| `hide-empty` | `boolean` | `false` | If present, hides reviews with no text. |
+| `accent-color`| `color` | `#4285f4` | Hex code for buttons and links. |
+| `star-color` | `color` | `#FBBC05` | Hex code for star icons. |
+| `bg-color` | `color` | `#ffffff` | Hex code for the card background. |
+| `text-color` | `color` | `#333333` | Hex code for the text color. |
 
 ## Supported Languages
 
