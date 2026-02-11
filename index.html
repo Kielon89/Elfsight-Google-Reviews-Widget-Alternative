@@ -224,6 +224,23 @@
         <div class="preview-area">
             <google-reviews-widget src="/reviews.json"></google-reviews-widget>
         </div>
+
+        <div class="control-group"
+            style="background: white; padding: 24px; border-radius: 12px; box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <label style="font-size:1.1rem; color:#111827; font-weight:600;">Embed Code</label>
+                <button class="copy-btn" id="copy-btn" style="position:static;">Copy to Clipboard</button>
+            </div>
+            <div class="code-snippet" id="embed-code" style="min-height: 120px;">
+                &lt;!-- Widget Script --&gt;
+                &lt;script type="module"
+                src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js"&gt;&lt;/script&gt;
+
+                &lt;!-- Widget Element --&gt;
+                &lt;google-reviews-widget src="reviews.json" theme="light" layout="grid"&gt;
+                &lt;/google-reviews-widget&gt;
+            </div>
+        </div>
     </main>
 
     <script type="module" src="/src/widget.ts"></script>
