@@ -24,7 +24,7 @@ export class GoogleReviewsWidget extends HTMLElement {
   private _data: ReviewsData | null = null;
 
   static get observedAttributes() {
-    return ['src', 'theme', 'layout', 'lang', 'min-rating', 'sort', 'hide-empty'];
+    return ['src', 'theme', 'layout', 'lang', 'min-rating', 'sort', 'hide-empty', 'bg-color', 'text-color', 'card-bg', 'border-color', 'accent-color', 'star-color'];
   }
 
   private _translations: Record<string, any> = {
@@ -178,6 +178,20 @@ export class GoogleReviewsWidget extends HTMLElement {
     const sort = this.getAttribute('sort') || 'newest';
     const hideEmpty = this.hasAttribute('hide-empty');
 
+    const stylesMap: Record<string, string> = {
+      '--bg-color': this.getAttribute('bg-color') || '',
+      '--text-color': this.getAttribute('text-color') || '',
+      '--card-bg': this.getAttribute('card-bg') || '',
+      '--border-color': this.getAttribute('border-color') || '',
+      '--accent-color': this.getAttribute('accent-color') || '',
+      '--star-color': this.getAttribute('star-color') || ''
+    };
+
+    const styleString = Object.entries(stylesMap)
+      .filter(([_, value]) => value)
+      .map(([key, value]) => `${key}: ${value};`)
+      .join(' ');
+
     const filteredReviews = this._data.reviews
       .filter(review => {
         if (review.rating < minRating) return false;
@@ -220,7 +234,7 @@ export class GoogleReviewsWidget extends HTMLElement {
 
     this.shadowRoot.innerHTML = `
       <style>${styles}</style>
-      <div class="widget-container ${theme} ${layout}">
+      <div class="widget-container ${theme} ${layout}" style="${styleString}">
         ${layout === 'badge' ? this.renderBadge() : `
           ${headerHtml}
           <div class="reviews-container ${layout === 'list' ? 'list-view' : ''}">

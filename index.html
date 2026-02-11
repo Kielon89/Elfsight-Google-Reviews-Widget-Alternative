@@ -185,6 +185,21 @@
         </div>
 
         <div class="control-group">
+            <h3>Theming</h3>
+            <label for="accent-color">Accent Color</label>
+            <input type="color" id="accent-color" value="#4285f4">
+
+            <label for="star-color">Star Color</label>
+            <input type="color" id="star-color" value="#FBBC05">
+
+            <label for="bg-color">Background Color</label>
+            <input type="color" id="bg-color" value="#ffffff">
+
+            <label for="text-color">Text Color</label>
+            <input type="color" id="text-color" value="#333333">
+        </div>
+
+        <div class="control-group">
             <label>Embed Code</label>
             <div class="code-snippet" id="embed-code">
                 <!-- Widget Script -->
@@ -220,9 +235,10 @@
         const minRatingVal = document.getElementById('min-rating-val');
         const sortSelect = document.getElementById('sort');
         const hideEmptyCheckbox = document.getElementById('hide-empty');
-        const canvasToggle = document.getElementById('canvas-dark');
-        const embedCode = document.getElementById('embed-code');
-        const copyBtn = document.getElementById('copy-btn');
+        const accentColorInput = document.getElementById('accent-color');
+        const starColorInput = document.getElementById('star-color');
+        const bgColorInput = document.getElementById('bg-color');
+        const textColorInput = document.getElementById('text-color');
 
         function updateWidget() {
             const theme = themeSelect.value;
@@ -231,6 +247,11 @@
             const minRating = minRatingInput.value;
             const sort = sortSelect.value;
             const hideEmpty = hideEmptyCheckbox.checked;
+
+            const accentColor = accentColorInput.value;
+            const starColor = starColorInput.value;
+            const bgColor = bgColorInput.value;
+            const textColor = textColorInput.value;
 
             minRatingVal.textContent = minRating;
 
@@ -246,16 +267,27 @@
                 widget.removeAttribute('hide-empty');
             }
 
-            updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty);
+            // Theming
+            widget.setAttribute('accent-color', accentColor);
+            widget.setAttribute('star-color', starColor);
+            widget.setAttribute('bg-color', bgColor);
+            widget.setAttribute('text-color', textColor);
+
+            updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty, { accentColor, starColor, bgColor, textColor });
         }
 
-        function updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty) {
+        function updateEmbedCode(theme, layout, lang, minRating, sort, hideEmpty, colors) {
             let code = `<!-- Widget Script -->\n<script type="module" src="https://cdn.jsdelivr.net/gh/USERNAME/REPO@main/dist/widget.js"><\/script>\n\n<!-- Widget Element -->\n<google-reviews-widget \n  src="reviews.json" \n  theme="${theme}" \n  layout="${layout}"`;
 
             if (lang !== 'en') code += ` \n  lang="${lang}"`;
             if (minRating !== '0') code += ` \n  min-rating="${minRating}"`;
             if (sort !== 'newest') code += ` \n  sort="${sort}"`;
             if (hideEmpty) code += ` \n  hide-empty`;
+
+            if (colors.accentColor !== '#4285f4') code += ` \n  accent-color="${colors.accentColor}"`;
+            if (colors.starColor !== '#FBBC05') code += ` \n  star-color="${colors.starColor}"`;
+            if (colors.bgColor !== '#ffffff') code += ` \n  bg-color="${colors.bgColor}"`;
+            if (colors.textColor !== '#333333') code += ` \n  text-color="${colors.textColor}"`;
 
             code += `>\n</google-reviews-widget>`;
             embedCode.textContent = code;
@@ -267,6 +299,11 @@
         minRatingInput.addEventListener('input', updateWidget);
         sortSelect.addEventListener('change', updateWidget);
         hideEmptyCheckbox.addEventListener('change', updateWidget);
+
+        accentColorInput.addEventListener('input', updateWidget);
+        starColorInput.addEventListener('input', updateWidget);
+        bgColorInput.addEventListener('input', updateWidget);
+        textColorInput.addEventListener('input', updateWidget);
 
         canvasToggle.addEventListener('change', (e) => {
             document.body.classList.toggle('dark-canvas', e.target.checked);

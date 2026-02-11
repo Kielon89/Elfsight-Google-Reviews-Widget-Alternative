@@ -6,6 +6,7 @@
     --card-bg: #f9fafb;
     --border-color: #e5e7eb;
     --accent-color: #4285f4;
+    --star-color: #FBBC05;
     --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     max-width: 100%;
     /* Fix: limit widget width */
@@ -73,7 +74,7 @@
 }
 
 .star-icon.filled path {
-    fill: #FBBC05;
+    fill: var(--star-color);
 }
 
 .count {
