@@ -129,9 +129,16 @@
                 value="#333333">
         </div>
 
-        <div class="control-group" style="margin-top: auto;"><label
-                style="display:flex; align-items:center; gap:8px;"><input type="checkbox" id="canvas-dark">Dark
-                Background </label></div>
+        <div class="control-group"
+            style="margin-top: auto; padding-top: 16px; border-top: 1px solid #e5e7eb; gap: 12px;">
+            <button id="reset-btn"
+                style="background: white; border: 1px solid #d1d5db; color: #374151; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.875rem; font-weight: 500; transition: all 0.2s;">
+                Reset to Defaults
+            </button>
+            <label style="display:flex; align-items:center; gap:8px;">
+                <input type="checkbox" id="canvas-dark"> Dark Background
+            </label>
+        </div>
     </aside>
     <main>
         <div class="preview-area"><google-reviews-widget src="/reviews.json"></google-reviews-widget></div>
@@ -262,6 +269,26 @@
             const originalText = copyBtn.textContent;
             copyBtn.textContent = 'Copied!';
             setTimeout(() => copyBtn.textContent = originalText, 2000);
+        });
+
+        const resetBtn = document.getElementById('reset-btn');
+        resetBtn.addEventListener('click', () => {
+            themeSelect.value = 'light';
+            layoutSelect.value = 'grid';
+            langSelect.value = 'en';
+            minRatingInput.value = '0';
+            sortSelect.value = 'newest';
+            hideEmptyCheckbox.checked = false;
+
+            accentColorInput.value = '#4285f4';
+            starColorInput.value = '#FBBC05';
+            bgColorInput.value = '#ffffff';
+            textColorInput.value = '#333333';
+
+            canvasToggle.checked = false;
+            document.body.classList.remove('dark-canvas');
+
+            updateWidget();
         });
 
         // Initial update
