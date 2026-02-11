@@ -229,6 +229,23 @@
     border-color: #374151;
 }
 
+/* List Layout */
+.widget-container.list .reviews-container.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    height: auto;
+    overflow-y: visible;
+    grid-template-columns: none;
+    /* Override grid */
+}
+
+.widget-container.list .review-card {
+    min-width: 0;
+    width: 100%;
+    margin-right: 0;
+}
+
 .badge-content {
     display: flex;
     align-items: center;

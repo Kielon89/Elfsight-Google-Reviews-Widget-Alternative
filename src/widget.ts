@@ -223,7 +223,7 @@ export class GoogleReviewsWidget extends HTMLElement {
       <div class="widget-container ${theme} ${layout}">
         ${layout === 'badge' ? this.renderBadge() : `
           ${headerHtml}
-          <div class="reviews-container">
+          <div class="reviews-container ${layout === 'list' ? 'list-view' : ''}">
             ${reviewsHtml}
           </div>
         `}
