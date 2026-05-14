@@ -33,7 +33,7 @@ jobs:
         env:
           GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
           PLACE_ID: ${{ secrets.PLACE_ID }}
-        run: node scripts/fetch-reviews.js
+        run: node scripts/fetch-reviews.cjs
 
       - name: Commit and Push changes
         run: |
