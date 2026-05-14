@@ -27,7 +27,7 @@ jobs:
         # Ah, I wrote the script in JS syntax but saved as .js, checking content...
         # Wait, I wrote TS syntax in the previous step (import ... from ...; const result: ...). I should fix that to either be pure JS or use ts-node.
         # Let's assume we will use pure JS for simplicity in the CI.
-        run: npm ci || true # Just in case
+        run: npm install # Just in case
 
       - name: Fetch Reviews
         env:
