@@ -17,9 +17,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 22
 
       - name: Install dependencies (if any needed for script)
         # We try to keep the script dep-free, but if we need 'node-fetch' in older node versions (node 18 has global fetch, but we used https module to be safe/standard) -> actually the script uses 'https' which is built-in.
